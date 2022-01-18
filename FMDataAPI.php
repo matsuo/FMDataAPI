@@ -1,11 +1,11 @@
 <?php
 
 /**
- * Object-oriented class for the REST API in Claris FileMaker Server and FileMaker Cloud for AWS.
+ * Object-oriented class for the REST API in Claris FileMaker Server.
  *
- * @version 22.0
+ * @version 22.1
  * @author Masayuki Nii <nii@msyk.net>
- * @copyright 2017-2021 Masayuki Nii (Claris FileMaker is registered trademarks of Claris International Inc. in the U.S. and other countries.)
+ * @copyright 2017-2022 Masayuki Nii (Claris FileMaker is registered trademarks of Claris International Inc. in the U.S. and other countries.)
  */
 
 namespace INTERMediator\FileMakerServer\RESTAPI;
@@ -15,7 +15,7 @@ use INTERMediator\FileMakerServer\RESTAPI\Supporting\FileMakerRelation;
 use Exception;
 
 /**
- * Class FMDataAPI is the wrapper of The REST API in Claris FileMaker Server and FileMaker Cloud for AWS.
+ * Class FMDataAPI is the wrapper of The REST API in Claris FileMaker Server.
  *
  * @package INTER-Mediator\FileMakerServer\RESTAPI
  * @link https://github.com/msyk/FMDataAPI GitHub Repository
@@ -23,7 +23,7 @@ use Exception;
  *    If the layout doesn't exist, no error arises here. Any errors might arise on methods of FileMakerLayout class.
  * @version 22
  * @author Masayuki Nii <nii@msyk.net>
- * @copyright 2017-2021 Masayuki Nii (Claris FileMaker is registered trademarks of Claris International Inc. in the U.S. and other countries.)
+ * @copyright 2017-2022 Masayuki Nii (Claris FileMaker is registered trademarks of Claris International Inc. in the U.S. and other countries.)
  * @source 1 100000 The source code.
  */
 class FMDataAPI
@@ -373,7 +373,7 @@ use Exception;
  * @link https://github.com/msyk/FMDataAPI GitHub Repository
  * @version 22
  * @author Masayuki Nii <nii@msyk.net>
- * @copyright 2017-2021 Masayuki Nii (Claris FileMaker is registered trademarks of Claris International Inc. in the U.S. and other countries.)
+ * @copyright 2017-2022 Masayuki Nii (Claris FileMaker is registered trademarks of Claris International Inc. in the U.S. and other countries.)
  */
 class FileMakerLayout
 {
@@ -425,9 +425,10 @@ class FileMakerLayout
      * @return array
      * @ignore
      */
-    private function buildPortalParameters($param, $shortKey = false)
+    private function buildPortalParameters($param, $shortKey = false, $method = "GET")
     {
         $key = $shortKey ? "portal" : "portalData";
+        $prefix = $method === "GET" ? "" : "_";
         $request = [];
         if (array_values($param) === $param) {
             $request[$key] = $param;
@@ -435,10 +436,10 @@ class FileMakerLayout
             $request[$key] = array_keys($param);
             foreach ($param as $portalName => $options) {
                 if (!is_null($options) && $options['limit']) {
-                    $request["_limit.{$portalName}"] = $options['limit'];
+                    $request["{$prefix}limit.{$portalName}"] = $options['limit'];
                 }
                 if (!is_null($options) && $options['offset']) {
-                    $request["_offset.{$portalName}"] = $options['offset'];
+                    $request["{$prefix}offset.{$portalName}"] = $options['offset'];
                 }
             }
         }
@@ -526,6 +527,7 @@ class FileMakerLayout
             if ($this->restAPI->login()) {
                 $headers = ["Content-Type" => "application/json"];
                 $request = [];
+                $method = is_null($condition) ? "GET" : "POST";
                 if (!is_null($sort)) {
                     $request["sort"] = $sort;
                 }
@@ -536,7 +538,7 @@ class FileMakerLayout
                     $request["limit"] = (string)$range;
                 }
                 if (!is_null($portal)) {
-                    $request = array_merge($request, $this->buildPortalParameters($portal, true));
+                    $request = array_merge($request, $this->buildPortalParameters($portal, true, $method));
                 }
                 if (!is_null($script)) {
                     $request = array_merge($request, $this->buildScriptParameters($script));
@@ -544,11 +546,10 @@ class FileMakerLayout
                 if (!is_null($condition)) {
                     $request["query"] = $condition;
                     $params = ["layouts" => $this->layout, "_find" => null];
-                    $this->restAPI->callRestAPI($params, true, "POST", $request, $headers);
                 } else {
                     $params = ["layouts" => $this->layout, "records" => null];
-                    $this->restAPI->callRestAPI($params, true, "GET", $request, $headers);
                 }
+                $this->restAPI->callRestAPI($params, true, $method, $request, $headers);
                 $this->restAPI->storeToProperties();
                 $result = $this->restAPI->responseBody;
                 $fmrel = null;
@@ -971,7 +972,7 @@ class FileMakerLayout
  *    The table occurrence name of the portal can be the 'portal_name,' and also the object name of the portal.
  * @version 22
  * @author Masayuki Nii <nii@msyk.net>
- * @copyright 2017-2021 Masayuki Nii (Claris FileMaker is registered trademarks of Claris International Inc. in the U.S. and other countries.)
+ * @copyright 2017-2022 Masayuki Nii (Claris FileMaker is registered trademarks of Claris International Inc. in the U.S. and other countries.)
  */
 class FileMakerRelation implements \Iterator
 {
@@ -1453,7 +1454,7 @@ class FileMakerRelation implements \Iterator
  * @link https://github.com/msyk/FMDataAPI GitHub Repository
  * @version 22
  * @author Masayuki Nii <nii@msyk.net>
- * @copyright 2017-2021 Masayuki Nii (Claris FileMaker is registered trademarks of Claris International Inc. in the U.S. and other countries.)
+ * @copyright 2017-2022 Masayuki Nii (Claris FileMaker is registered trademarks of Claris International Inc. in the U.S. and other countries.)
  */
 class CommunicationProvider
 {
