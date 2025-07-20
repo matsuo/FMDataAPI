@@ -9,9 +9,6 @@ on:
       - "*"
   pull_request:
     branches: [ 'master', 'main' ]
-  pull_request_target:
-    types:
-      - closed
 
 jobs:
   run:
@@ -40,9 +37,9 @@ jobs:
       - name: Run Phan
         continue-on-error: true
         run: |
-          if [ -f ~/test/phan-baseline.php ]; then
+          if [ -f test/phan-baseline.php ]; then
             echo "Cached baseline for Phan is found. Running Phan with baseline."
-            phan -d ./ -k .phan/config.php --load-baseline ~/test/phan-baseline.php --no-progress-bar
+            phan -d ./ -k .phan/config.php --load-baseline test/phan-baseline.php --no-progress-bar
           else
             echo "Cached baseline for Phan is not found. Running Phan without baseline."
             phan -d ./ -k .phan/config.php --no-progress-bar
@@ -53,7 +50,7 @@ jobs:
         continue-on-error: true
         if: github.event.pull_request.merged == true
         run: |
-          phan -d ./ -k .phan/config.php --save-baseline ~/test/phan-baseline.php --no-progress-bar
+          phan -d ./ -k .phan/config.php --save-baseline test/phan-baseline.php --no-progress-bar
           exit 0
 
       - name: Save the baseline for Phan
