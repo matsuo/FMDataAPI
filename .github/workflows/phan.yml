@@ -48,14 +48,14 @@ jobs:
 
       - name: Generate the baseline for Phan
         continue-on-error: true
-        if: github.event.pull_request.merged == true
         run: |
           phan -d ./ -k .phan/config.php --save-baseline test/phan-baseline.php --no-progress-bar
+          echo ${{ github.event_name }}
+          echo ${{ github.event.action }}
           exit 0
 
       - name: Save the baseline for Phan
         id: save-the-baseline-for-phan
-        if: github.event.pull_request.merged == true
         uses: actions/cache/save@d4323d4df104b026a6aa633fdb11d772146be0bf # v4.2.2
         with:
           path: |
