@@ -11,6 +11,7 @@ use Exception;
  * and you shouldn't call the constructor of this class.
  *
  * @package INTER-Mediator\FileMakerServer\RESTAPI
+ * @implements Iterator<int, mixed>
  * @link https://github.com/msyk/FMDataAPI GitHub Repository
  * @property string $fieldName The field value named as the property name accessed via __get().
  * @property FileMakerRelation $portalName A FileMakerRelation object associated with the property name accessed via __get().
