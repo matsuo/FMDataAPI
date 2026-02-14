@@ -1,0 +1,25 @@
+name: Psalm
+
+permissions:
+  contents: read
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  run:
+    name: Run Psalm
+    runs-on: 'ubuntu-latest'
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+
+      - name: Setup PHP
+        uses: ./.github/actions/setup-php
+
+      - name: Install Psalm
+        run: composer require --dev vimeo/psalm:6.15.1
+
+      - name: Run Psalm
+        run: ./vendor/bin/psalm --no-cache
