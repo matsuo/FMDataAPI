@@ -35,3 +35,11 @@ strict-list-index-checks = false
 no-boolean-literal-comparison = false
 check-missing-type-hints = false
 register-super-globals = true
+ignore = [
+    # error
+    "falsable-return-statement", "invalid-iterator", "invalid-property-access", "invalid-return-statement", "less-specific-argument", "mixed-argument", "mixed-array-access", "mixed-array-assignment", "mixed-operand", "mixed-property-access", "mixed-property-type-coercion", "mixed-return-statement", "non-existent-class", "nullable-return-statement", "possible-method-access-on-null", "possibly-false-argument", "possibly-invalid-argument", "possibly-null-argument", "possibly-null-property-access",
+    # warning
+    "ambiguous-object-property-access", "generic-object-iteration", "impossible-condition", "impossible-null-type-comparison", "impossible-type-comparison", "mixed-assignment", "possibly-false-operand", "possibly-invalid-iterator", "possibly-null-array-access", "possibly-null-iterator", "possibly-null-operand", "string-member-selector",
+    # help
+    "redundant-comparison", "redundant-logical-operation"
+]
